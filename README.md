@@ -12,7 +12,7 @@
 pip install -r requirements.txt
 ```
 
-## Dependencies:
+## Dependencies
 ```
 beautifulsoup4==4.9.1
 certifi==2020.6.20
@@ -25,8 +25,8 @@ soupsieve==2.0.1
 urllib3==1.25.10
 ```
 
-## Configuration:
-To change from Atom type to Json or Html, edit:
+## Configuration
+To change from Atom type to Json or Html edit:
 ```
 rssBridgeUrl = "...format=Atom"
 ```
