@@ -1,7 +1,7 @@
 # Generate working Instagram rss-bridge links
 
 ## What it does
-Finds the id of the user and inserts it an rss-bridge url
+Finds the id of the user and inserts it to an rss-bridge url
 
 ## Usage
 
