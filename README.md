@@ -2,6 +2,7 @@
 
 ## What it does
 Finds the Instagram id of the user and inserts it to an rss-bridge url that works with RSS readers
+
 For Twitter it checks if user exists and gives a nitter.net RSS url
 
 ## Usage
