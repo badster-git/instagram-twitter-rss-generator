@@ -10,7 +10,7 @@ def getUsernameResult(username, column):
         response = requests.get(baseUrl)
         soup = BeautifulSoup(response.text, 'html.parser')
         if (soup.find('title').text) == 'Error | nitter':
-            print("User doesn't exits")
+            print("User doesn't exist")
             return
         else:
             return baseUrl
