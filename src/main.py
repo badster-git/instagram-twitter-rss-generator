@@ -4,11 +4,22 @@ import clipboard
 import argparse
 import requests
 
-def getUsernameResult(username):
-    instagramUrl = "https://instagram.com/{}".format(username)
+def getUsernameResult(username, column):
+    if column == 'twitter':
+        baseUrl = "https://nitter.net/{}/rss".format(username)
+        response = requests.get(baseUrl)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        if (soup.find('title').text) == 'Error | nitter':
+            print("User doesn't exits")
+            return
+        else:
+            return baseUrl
+    else:
+        baseUrl = "https://instagram.com/{}".format(username)
 
-    response = requests.get(instagramUrl)
+    response = requests.get(baseUrl)
     soup = BeautifulSoup(response.text, 'html.parser')
+
     keyValue = '"logging_page_id"'
 
     try:
@@ -50,14 +61,30 @@ def getRSSBridgeLink(userId):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('user', nargs='+', help='user to find id for')
-    args = parser.parse_args()
-    user_term = ' '.join(args.user)
+    column = parser.add_mutually_exclusive_group()
+    parser.add_argument('search', nargs='+', help='user to find id for')
+    column.add_argument('-i', '--instagram', action='store_true',
+                                            help='get Instagram url')
+    column.add_argument('-t', '--twitter', action='store_true',
+                                            help='get Twitter url')
 
-    userId = getId(getUsernameResult(user_term))
+    args = parser.parse_args()
+    user_term = ' '.join(args.search)
+    search_args = [(args.instagram, 'instagram'),
+                    (args.twitter, 'twitter')]
+    selColumn = 'def'
+    for arg in search_args:
+        if arg[0]:
+            selColumn = arg[1]
+
+    userId = getUsernameResult(user_term, selColumn)
+
     if (userId):
-        rssLink = getRSSBridgeLink(userId)
-        clipboard.copy(rssLink)
+        if selColumn == 'twitter':
+            clipboard.copy(userId)
+        else:
+            rssLink = getRSSBridgeLink(getId(userId))
+            clipboard.copy(rssLink)
         print("Link copied to clipboard.")
     else:
         print("No id found.\nCheck spelling or try a different username.")
