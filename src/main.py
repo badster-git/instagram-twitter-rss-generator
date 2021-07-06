@@ -6,8 +6,8 @@ import requests
 
 def getUsernameResult(username, column):
     if column == 'twitter':
-        baseUrl = "https://nitter.net/{}/rss".format(username)
-        response = requests.get(baseUrl)
+        baseUrl = "https://nitter.cattube.org/{}/rss".format(username)
+        response = requests.get(baseUrl, verify=False)
         soup = BeautifulSoup(response.text, 'html.parser')
         if (soup.find('title').text) == 'Error | nitter':
             print("User doesn't exist")
@@ -15,48 +15,19 @@ def getUsernameResult(username, column):
         else:
             return baseUrl
     else:
-        baseUrl = "https://instagram.com/{}".format(username)
+        return getRSSBridgeLink(username)
 
-    response = requests.get(baseUrl)
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    keyValue = '"logging_page_id"'
-
-    try:
-        for i in range(10):
-            if keyValue in str(soup.find_all('script')[i])[:300]:
-                val = str(soup.find_all('script')[i])[:300]
-                return val
-    except IndexError:
-        val = ""
-
-def getId(text):
-    if (text is not None):
-        keyValue = '"logging_page_id"'
-        start = text.find(keyValue)
-
-        cnt = 0
-        pos = 0
-        for x in text[start:]:
-            if '"' == x:
-               cnt += 1
-            elif cnt == 4:
-                end = start + pos
-                break
-            pos += 1
-        userId = text[start:end].rsplit('_',1)[1].rstrip('"')
-        return userId
-    else:
-        return False
-
-
-def getRSSBridgeLink(userId):
-    param = urlencode({'u': userId})
-    rssBridgeUrl = ("https://rss-bridge.snopyta.org"
+def getRSSBridgeLink(username):
+    param = urlencode({'u': username})
+    rssBridgeUrl = ("https://feed.eugenemolotov.ru/"
                     "/?action=display&bridge=Instagram"
                     "&context=Username&%s&media_type=all&format=Atom" % param
                     )
-    return rssBridgeUrl
+    response = requests.get(rssBridgeUrl, verify=False)
+    if response.status_code != 500:
+        return rssBridgeUrl
+    else:
+        return False
 
 
 if __name__ == '__main__':
@@ -77,13 +48,12 @@ if __name__ == '__main__':
         if arg[0]:
             selColumn = arg[1]
 
-    userId = getUsernameResult(user_term, selColumn)
+    rssLink = getUsernameResult(user_term, selColumn)
 
-    if (userId):
+    if (rssLink):
         if selColumn == 'twitter':
-            clipboard.copy(userId)
+            clipboard.copy(rssLink)
         else:
-            rssLink = getRSSBridgeLink(getId(userId))
             clipboard.copy(rssLink)
         print("Link copied to clipboard.")
     else:
