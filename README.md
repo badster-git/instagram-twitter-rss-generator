@@ -26,9 +26,9 @@ chardet==3.0.4
 clipboard==0.0.4
 idna==2.10
 pyperclip==1.8.0
-requests==2.24.0
+requests==2.25.1
 soupsieve==2.0.1
-urllib3==1.25.10
+urllib3==1.26.6
 ```
 
 ## Configuration
