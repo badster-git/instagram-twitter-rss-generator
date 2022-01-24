@@ -1,9 +1,14 @@
 # Generate working Instagram/Twitter RSS links
 
-## What it does
-Finds the Instagram id of the user and inserts it to an rss-bridge url that works with RSS readers
+## RSS-Bridge Instagram Issue
+At the moment, RSS-Bridge is not able to generate feeds for instagram. 
 
-For Twitter it checks if user exists and gives a nitter.net RSS url
+## What it does
+<del>
+Finds the Instagram id of the user and inserts it to an rss-bridge url that works with RSS readers
+</del>
+
+Finds if Twitter user exists and gives a nitter.net RSS url.
 
 ## Usage
 
@@ -11,7 +16,7 @@ For Twitter it checks if user exists and gives a nitter.net RSS url
   ```
   python main.py [-i | -t] [username]
   ```
-  Omitting arguments returns Instagram by default
+  Omitting arguments returns <del>Instagram</del>Twitter by default
   
 ### Install dependencies with:
 ```

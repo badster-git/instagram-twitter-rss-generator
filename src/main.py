@@ -5,8 +5,10 @@ import argparse
 import requests
 
 def getUsernameResult(username, column):
-    if column == 'twitter':
-        baseUrl = "https://nitter.cattube.org/{}/rss".format(username)
+    if column == 'instagram':
+        return getRSSBridgeLink(username)
+    else:
+        baseUrl = "https://nitter.pussthecat.org/{}/rss".format(username)
         response = requests.get(baseUrl, verify=False)
         soup = BeautifulSoup(response.text, 'html.parser')
         if (soup.find('title').text) == 'Error | nitter':
@@ -14,8 +16,6 @@ def getUsernameResult(username, column):
             return
         else:
             return baseUrl
-    else:
-        return getRSSBridgeLink(username)
 
 def getRSSBridgeLink(username):
     param = urlencode({'u': username})
